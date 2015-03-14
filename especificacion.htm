@@ -1,0 +1,695 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="es-ve">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Tron Race Especificación oficial</title>
+<style>
+<!--
+h1           { text-align: center }
+-->
+</style>
+</head>
+
+<body>
+
+<h1><font size="7">Tron Race</font><br>
+Especificación oficial de archivos de juego</h1>
+<p>Los archivos de juego consisten de texto plano. Cada dato ocupa una línea.</p>
+<h2>Estructura del archivo</h2>
+<p>Cada archivo comienza 
+declarando las constantes universales:</p>
+<ul>
+	<li>el número de vidas y</li>
+	<li>el número de niveles</li>
+</ul>
+<p>De ahí en adelante, el programa lee tantos niveles como se hayan declarado. 
+Cada nivel tiene la siguiente estructura:</p>
+<ul>
+	<li>Datos del área de juego</li>
+	<ul>
+		<li>Datos del terreno</li>
+		<li>Obstáculos</li>
+	</ul>
+	<li>Datos de los jugador</li>es<ul>
+		<li>Datos del jugador humano</li>
+		<li>Datos de los contrincantes</li>
+	</ul>
+</ul>
+<p><a href="#ex">Saltar a archivo de ejemplo</a></p>
+<h2>Área de juego</h2>
+<h3>Terreno</h3>
+<p>Los datos del terreno se componen de:</p>
+<ul>
+	<li>las dimensiones del área de juego (ancho por alto)</li>
+	<li>la posición de la salida (coordenadas X-Z)</li>
+	<li>la textura del cielo (el nombre de archivo de una imagen perfectamente 
+	cuadrada, cuyas dimensiones sean potencias de 2)</li>
+	<li>el mapa de alturas</li>
+	<ul>
+		<li>archivo de textura</li>
+		<li>tamaño que debe tener el terreno que éste genera</li>
+		<li>posición del mismo en el área de juego</li>
+	</ul>
+</ul>
+
+<h3>Obstáculos</h3>
+<p>Los obstáculos deben precederse de un número que indica cuántos obstáculos 
+tiene el nivel. Cada obstáculo se compone de:</p>
+<ul>
+	<li>Representación del obstáculo (véase aparte <a href="#rep">
+	Representaciones</a>)</li>
+	<li>Camino del obstáculo</li>
+	<li>Rapidez de movimiento</li>
+</ul>
+<p>Estos caminos se constituyen de una lista de coordenadas en XYZ, precedidos 
+del número de coordenadas. El origen de estas coordenadas se encuentra en el 
+centro del terreno de juego (el piso de la escena). Para objetos estacionarios, 
+colóquese un sólo punto.</p>
+<h2>Jugadores</h2>
+<h3>Humano</h3>
+<p>Los datos del jugador humano son los primeros datos de jugador que se deben 
+dar. Los datos del jugador humano vienen dados por:</p>
+<ul>
+	<li>su representación (véase aparte <a href="#rep">Representaciones</a>)</li>
+	<li>su posición inicial en el nivel (coordenadas X-Z)</li>
+	<li>su rapidez máxima a través de aceleración ordinaria, en unidades por 
+	segundo (single-precision float)</li>
+	<li>su rapidez máxima a través de aceleración por impulso adicional, en 
+	unidades por segundo (single-precision float)</li>
+	<li>La duración, en segundos, de este impulso adicional (single-precision 
+	float)</li>
+	<li>El tiempo, en segundos, antes del próximo impulso (single-precision 
+	float)</li>
+</ul>
+<h3>Contrincantes</h3>
+<p>Cada contrincante colocado en el escenario intentará interceptar al jugador 
+usando una trayectoria de línea recta. Para contrincantes que siguen una 
+trayectoria fija, considere representarlos como obstáculos con un camino.</p>
+<ul>
+	<li>Representación (véase aparte <a href="#rep">Representaciones</a>)</li>
+	<li>su posición inicial en el nivel (coordenadas X-Z)</li>
+	<li>su rapidez máxima, en unidades por segundo (single-precision float)</li>
+</ul>
+<h2><a name="rep">Representaciones</a></h2>
+<p>Las representaciones de todos los elementos siguen la siguiente estructura 
+uniformemente:</p>
+<ul>
+	<li>Tipo</li>
+	<li>Tamaño</li>
+	<li>Textura</li>
+</ul>
+<p>El tipo debe ser uno de los siguientes caracteres: c, y, s, d ó m. Este 
+caracter dicta los contenidos de &quot;tamaño&quot; de la siguiente manera</p>
+<div align="center">
+<table border="1" id="table1">
+	<tr>
+		<th>Símbolo</th>
+		<th>Significado</th>
+		<th>Parámetros de &quot;tamaño&quot;</th>
+		<th>Coordenadas indican</th>
+	</tr>
+	<tr>
+		<td>p</td>
+		<td>paralelepípedo</td>
+		<td>ancho, alto, profundidad</td>
+		<td>esquina inferior-izquierda posterior</td>
+	</tr>
+	<tr>
+		<td>y</td>
+		<td>cilindro</td>
+		<td>radio de base, radio de tapa superior, altura</td>
+		<td>centro de tapa inferior</td>
+	</tr>
+	<tr>
+		<td>s</td>
+		<td>esfera</td>
+		<td>radio</td>
+		<td>centro</td>
+	</tr>
+	<tr>
+		<td>d</td>
+		<td>disco</td>
+		<td>radio</td>
+		<td>centro</td>
+	</tr>
+	<tr>
+		<td>u</td>
+		<td>tetera de Utah</td>
+		<td>tamaño</td>
+		<td>centro?</td>
+	</tr>
+	<tr>
+		<td>t</td>
+		<td>toro (dona)</td>
+		<td>radio interno, radio externo</td>
+		<td>centro!</td>
+	</tr>
+</table>
+
+</div>
+<h2><a name="ex">Archivo de ejemplo</a></h2>
+<table border="1" id="table2" style="border-width: 0px" cellspacing="0" 
+cellpadding="2">
+	<tr>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:solid; border-bottom-width:1px" 
+  valign="top">Parte 
+		en la estructura</th>
+		<th style="border-style: none; border-width: medium">Parámetro</th>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium">
+		Ejemplo</th>
+		<th style="border-style: none; border-width: medium">Observaciones</th>
+	</tr>
+	<tr>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:solid; border-top-width:1px; border-bottom-style:solid; border-bottom-width:1px" rowspan="2" 
+  valign="top">Constantes universales</th>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Vidas</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:solid; border-top-width:1px; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">3</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Debe ser un número 
+		natural</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Niveles</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">1</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Debe ser un número 
+		natural</td>
+	</tr>
+	<tr>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:solid; border-top-width:1px; border-bottom-style:solid; border-bottom-width:1px" valign="top" 
+  rowspan="13">Datos de área de juego: Terreno</th>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Longitud del 
+		terreno</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">100</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium" 
+  rowspan="3">Puede 
+		ser cualquier número real, pero si no está entre 50 y 200, el programa 
+		imprime un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Anchura del Terreno</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">100</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Altura de las paredes bordes del terreno</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">50</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Coordenada X de la 
+		salida</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">-50</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium" 
+  rowspan="2">Las 
+		coordenadas son con respecto al centro del área de juego. Si caen fuera 
+		del área de juego (e.g. -51,-51), el programa imprime un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Coordenada 
+		Z de la 
+		salida</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">-25</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Textura del cielo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">clouds.RAW</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium" 
+  rowspan="2">El 
+		formato RAW es preferible, pero cualquier formato que pueda procesar 
+		OpenGL es aceptable.</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Archivo del mapa de 
+		alturas</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">topo.RAW</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Longitud que debe 
+		tener la malla generada por el mapa de alturas</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">20</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Puede ser cualquier 
+		número real, pero si es mayor que la longitud del terreno, el programa 
+		imprime un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Anchura que debe 
+		tener la malla generada por el mapa de alturas</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">15</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Puede ser cualquier 
+		número real, pero si es mayor que la anchura del terreno, el programa 
+		imprime un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Altura máxima sobre el piso (representada por el blanco)</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">50</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Altura mínima sobre el piso (representada por el negro)</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Puede ser un real negativo, pero en dicho caso, el programa imprimirá un 
+		warning.</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Coordenada X en la 
+		que se debe colocar la malla</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium" 
+  rowspan="2">Puede 
+		ser cualquier número real, pero si causa que parte de la malla se salga 
+		del área de juego, el programa imprime un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Coordenada Z en la 
+		que se debe colocar la malla</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+	</tr>
+	<tr>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:solid; border-top-width:1px; border-bottom-style:solid; border-bottom-width:1px" 
+  valign="top" rowspan="39">
+		Obstáculos</th>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Número de 
+		obstáculos</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">3</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Puede ser cualquier 
+		número natural, pero si es menor que 3, el programa imprime un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Tipo del primer 
+		obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">p</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Debe ser p, c, s, d 
+		ó m (véase aparte <a href="#rep">Representaciones</a>)</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Ancho</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium" 
+  rowspan="3">El significado 
+		viene definido por el tipo de obstáculo. Puede ser cualquier número real</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Alto</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Profundidad</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">3</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Textura</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">cork.RAW</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Número de puntos en 
+		el camino de este obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">1</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">1 punto define un 
+		objeto estacionario</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Coordenada X del 
+		primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">25</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium" 
+  rowspan="3">Puede ser cualquier 
+		número real, pero si está fuera del área de juego, el programa imprime 
+		un warning. El programa no revisa si el obstáculo sale <em>parcialmente</em> del 
+		área de juego en su trayectoria.</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Y del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Z del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">-15</font></td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Rapidez del obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Al sólo haber un punto, este valor no afecta el movimiento de este 
+		obstáculo</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Tipo del segundo obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">y</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Radio de base</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2.5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Radio de tapa</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2.5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Altura</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Textura</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">rock.RAW</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Número de puntos en 
+		el camino de este obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada X del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">40</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Y del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Z del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">30</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada X del segundo punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">40</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Y del segundo punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">20</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		El objeto también puede moverse verticalmente, actuando como un 
+		aplastador</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Z del segundo punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">30</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Rapidez del obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0.3</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Tipo del tercer objeto</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">torus</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Se puede poner más de un caracter; el programa tomará el primero e 
+		imprimirá un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		radio interno</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		radio externo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">7</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		textura</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">fur.RAW</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">Número de puntos en 
+		el camino de este obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">3</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada X del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">10</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Y del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Z del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">-5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada X del segundo punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Y del segundo punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Z del segundo punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">10</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada X del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">-10</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Y del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada Z del primer punto del camino</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Rapidez del obstáculo</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">1</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:solid; border-top-width:1px; border-bottom-style:solid; border-bottom-width:1px" 
+  valign="top" rowspan="9">Jugadores: Jugador humano</th>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Tipo de representación</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">u</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		tamaño</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		textura</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">player.RAW</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada inicial X</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">40</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada inicial Z</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">40</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		rapidez máxima normal</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">.75</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		unidades por segundo</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		rapidez máxima impulso</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">1</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		unidades por segundo</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		duración impulso</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">2.5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		tiempo en segundos</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		tiempo antes de próximo impulso</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		tiempo en segundos</td>
+	</tr>
+	<tr>
+		<th style="border-left-style:none; border-left-width:medium; border-right-style:none; border-right-width:medium; border-top-style:solid; border-top-width:1px; border-bottom-style:none; border-bottom-width:medium" 
+  valign="top" rowspan="7">Jugadores: contrincantes</th>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Número de contrincantes</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">1</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Puede ser cualquier entero no-negativo, pero si es mayor que 3 el 
+		programa imprimirá un warning</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Tipo de representación del primer contrincante</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">u</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		tamaño</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">5</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		textura</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">opponent.RAW</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada inicial X</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">0</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		Coordenada inicial Z</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		<font face="Monospace" size="2">-49</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="border-left-style:none; border-left-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">
+		rapidez máxima</td>
+		<td style="border-left-style:solid; border-left-width:1px; border-top-style:none; border-top-width:medium; border-bottom-style:solid; border-bottom-width:1px">
+		<font face="Monospace" size="2">.85</font></td>
+		<td style="border-left-style:solid; border-left-width:1px; border-right-style:none; border-right-width:medium; border-top-style:none; border-top-width:medium; border-bottom-style:none; border-bottom-width:medium">&nbsp;</td>
+	</tr>
+</table>
+
+</body>
+
+</html>
